@@ -270,12 +270,14 @@ def _checkSW(sw1, sw2, data):
 	if sw1 == 0x67 and sw2 == 0x00:
 		raise IndexError("Invalid length of expected data.")
 	if sw1 == 0x65 and sw2 == 0x81:
-		raise PermissionError("Unknown mode.")
+		raise ValueError("Unknown mode.")
 	if sw1 == 0x6d and sw2 == 0x00:
-		raise PermissionError("Invalid instruction byte (INS).")
+		raise ValueError("Invalid instruction byte (INS).")
+	if sw1 == 0x63 and sw2 == 0x00:
+		raise ValueError("Invalid secret code or forbidden value")
 	if sw1 == 0x90 and sw2 == 00:
 		return data
-	raise Exception("Unexpected SW response!")
+	raise Exception("Unexpected SW response! {:02x} {:02x}".format(sw1, sw2))
 
 def _parseRC(rcWord):
 	rcNibble=rcWord[3]>>4
